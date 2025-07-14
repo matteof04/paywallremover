@@ -11,7 +11,10 @@ use std::{env, process::exit, sync::Arc};
 use log::{error, info, trace, warn};
 use paywallremover::{process_url, special::Domains, ProcessError};
 use regex::Regex;
-use teloxide::{prelude::*, types::MessageEntityKind};
+use teloxide::{
+    prelude::*,
+    types::{MessageEntityKind, ReplyParameters},
+};
 use url::Url;
 
 #[tokio::main]
@@ -52,7 +55,7 @@ async fn main() {
     let bot = Bot::new(bot_token);
     let handler = Update::filter_message().endpoint(
         |bot: Bot, remote_check: Arc<bool>, domains: Arc<Domains>, msg: Message| async move {
-            if let Some(user) = msg.from() {
+            if let Some(user) = &msg.from {
                 trace!("New message from user with ID: {:?}", user.id)
             }
             match extract_url(&msg) {
@@ -63,18 +66,18 @@ async fn main() {
                             Err(e) => format!("{e}"),
                         };
                         bot.send_message(msg.chat.id, response)
-                            .reply_to_message_id(msg.id)
+                            .reply_parameters(ReplyParameters::new(msg.id))
                             .await?;
                     }
                     Err(e) => {
                         bot.send_message(msg.chat.id, format!("{e}"))
-                            .reply_to_message_id(msg.id)
+                            .reply_parameters(ReplyParameters::new(msg.id))
                             .await?;
                     }
                 },
                 None => {
                     bot.send_message(msg.chat.id, format!("{}", ProcessError::NotAnUrl))
-                        .reply_to_message_id(msg.id)
+                        .reply_parameters(ReplyParameters::new(msg.id))
                         .await?;
                 }
             }
