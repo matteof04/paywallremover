@@ -32,6 +32,8 @@ To build the json you can check [here](https://github.com/Freedium-cfd/core/blob
 
 If you want to use a different name or path for the domains file, set the DOMAIN_FILE environment variable to the desired path.
 
+A docker compose example file is available [here](https://raw.githubusercontent.com/matteof04/paywallremover/refs/heads/main/compose.yaml).
+
 ## Note
 
 This software nor its creator are affiliated with Medium, Freedium or Paywallremover. For copyright complaints about any sort, contact them.\

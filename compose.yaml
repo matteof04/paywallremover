@@ -1,0 +1,11 @@
+services:
+  paywallremover:
+    image: ghcr.io/matteof04/paywallremover:latest
+    restart: always
+    environment:
+      - LOG_LEVEL=trace
+      - DOMAIN_FILE=/etc/paywallremover/domains.json
+      - BOT_TOKEN=${BOT_TOKEN}
+      # - REMOTE_CHECK=true
+    volumes:
+      - ./domains.json:/etc/paywallremover/domains.json:bind
